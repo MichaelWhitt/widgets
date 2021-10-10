@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, {useState, useEffect} from "react";
 
+
 const Search = () => {
 
-    const [term, setTerm] = useState('Programming');
+    const [term, setTerm] = useState('programming');
     const [results, setResults] = useState([]);
     
+    //console.log(results)
     
 
     //have to configure useEffect to tell it WHEN we want our code to be executed (via 2nd argument)
@@ -19,18 +21,32 @@ const Search = () => {
                         list: 'search',
                         origin: '*',
                         format: 'json',
-                        srsearch: term
-                    }
-                })
-                setResults(data.query.results);
-                
-                
+                        srsearch: term,
+                    },
+                });
+                //takes search array out of data results
+                setResults(data.query.search);
             }; 
-                
+                //checks if there is default search term in hook, if yes, searches, if no, waits until there is smth then search
+                // if (term){
+                //     search();
+                // }
                 search();
-            
-     
-    }, [term]);
+                }, [term]);
+
+                const renderedResults = results.map(result => {
+                    console.log(result)
+                    return (
+                        <div key={result.pageid} className="item">
+                            <div className="content">
+                                <div className="header">
+                                    {result.title}
+                                </div>
+                                {result.snippet}
+                            </div>
+                        </div>
+                    )
+                })
 
     return (
     <div>
@@ -45,6 +61,7 @@ const Search = () => {
                 ></input>
             </div>
         </div>
+        <div className="ui celled list">{renderedResults}</div>
     </div>
     )
 }
