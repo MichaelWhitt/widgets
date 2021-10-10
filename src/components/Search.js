@@ -31,18 +31,22 @@ const Search = () => {
                 });
                 //takes search array out of data results
                 setResults(data.query.search);
-            }; 
-                //checks if there is default search term in hook, if yes, searches, if no, waits until there is smth then search
-                const timeoutId = setTimeout(()=>{
-                    if (term){
-                        search()
-                    }
-                }, 500);
+                }; 
 
-                return () => {
-                    clearTimeout(timeoutId)
-                }
-                
+                if(term && !results.length){
+                    search();
+                } else {
+                        //checks if there is default search term in hook, if yes, searches, if no, waits until there is smth then search
+                        const timeoutId = setTimeout(()=>{
+                            if (term){
+                                search()
+                            }
+                        }, 500);
+
+                        return () => {
+                            clearTimeout(timeoutId)
+                        }
+                    }
                 }, [term]);
                 
 
